@@ -8,15 +8,16 @@ public class AppRutaMasCorta {
 
     public static void main(String[] args) throws GrafoException {
 
-        Grafo graph = crearGrafo();
+        // Inicializa variables
         int claveOrigen = 0;
         int claveDestino = 0;
         String tipoRecorrido = "";
 
-        // Recorrido(a = anchura, p = profundidad, v = viaticos)
-        // graph.Recorrido('p', 0);
-        // mejorRecorridoTiempo(claveOrigen-1, claveDestino)
+        // Construye el grafo
+        Grafo graph = crearGrafo();
 
+        // Muestra los vertices disponibles con claves para seleccionarlos de un menu
+        System.out.println("VERTICES Y CLAVES DEL GRAFO");
         graph.imprimirVertices(graph.getLVertices());
         System.out.println("Introduzca la clave del origen :");
         while (claveOrigen > graph.getLVertices().size() || claveOrigen < 1) {
@@ -27,24 +28,28 @@ public class AppRutaMasCorta {
             claveDestino = lectura.nextInt();
         }
 
-        System.out.println("Introduzca el tipo de recorrido deseado (t para tiempo y v para viaticos) :");
-        tipoRecorrido = lectura.next();
-        System.out.println("-----------------------------");
+        // Determina si el nodo de origen solicitado tiene destinos
+        if (!graph.getLVertices().get(claveOrigen - 1).getAdyacentes().isEmpty()) {
+            System.out.println("Introduzca el tipo de recorrido deseado ('t' tiempo y 'v' para viaticos) :");
+            tipoRecorrido = lectura.next();
+            System.out.println("-----------------------------");
 
-        switch (tipoRecorrido.charAt(0)) {
-            case 't':
-            case 'T':
-                graph.mejorRecorridoTiempo(claveOrigen - 1, claveDestino);
-                break;
-            case 'v':
-            case 'V':
-                graph.mejorRecorridoViaticos(claveOrigen - 1, claveDestino);
-                break;
-            default:
-                System.out.println("El tipo de destino no es valido");
-                break;
+            switch (tipoRecorrido.charAt(0)) {
+                case 't':
+                case 'T':
+                    graph.mejorRecorridoTiempo(claveOrigen, claveDestino);
+                    break;
+                case 'v':
+                case 'V':
+                    graph.mejorRecorridoViaticos(claveOrigen, claveDestino);
+                    break;
+                default:
+                    System.out.println("El tipo de destino no es valido");
+                    break;
+            }
+        } else {
+            System.out.println("El vertice origen no tiene destinos disponibles !");
         }
-
     }
 
     public static Grafo crearGrafo() {
@@ -53,16 +58,16 @@ public class AppRutaMasCorta {
         Grafo graph = new Grafo(true);
 
         // AddVertice(clave vertice, datos(nombre))
-        graph.AddVertice(1, new DatosV("a"));
-        graph.AddVertice(2, new DatosV("b"));
-        graph.AddVertice(3, new DatosV("c"));
-        graph.AddVertice(4, new DatosV("d"));
-        graph.AddVertice(5, new DatosV("e"));
-        graph.AddVertice(6, new DatosV("f"));
-        graph.AddVertice(7, new DatosV("g"));
-        graph.AddVertice(8, new DatosV("h"));
-        graph.AddVertice(9, new DatosV("i"));
-        graph.AddVertice(10, new DatosV("j"));
+        graph.AddVertice(1, new DatosV("A"));
+        graph.AddVertice(2, new DatosV("B"));
+        graph.AddVertice(3, new DatosV("C"));
+        graph.AddVertice(4, new DatosV("D"));
+        graph.AddVertice(5, new DatosV("E"));
+        graph.AddVertice(6, new DatosV("F"));
+        graph.AddVertice(7, new DatosV("G"));
+        graph.AddVertice(8, new DatosV("H"));
+        graph.AddVertice(9, new DatosV("I"));
+        graph.AddVertice(10, new DatosV("J"));
 
         // AddArista(clave origen, clave destino, datos(tiempo, viaticos))
         graph.AddArista(1, 2, new DatosA(3, 3));

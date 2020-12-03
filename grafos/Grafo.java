@@ -234,8 +234,10 @@ public class Grafo {
 	}
 
 	public void mejorRecorridoTiempo(int claveVerticeOrigen, int claveVerticeDestino) throws GrafoException {
-		Recorrido('t', claveVerticeOrigen);
+		Recorrido('t', claveVerticeOrigen - 1);
 		Vertice<DatosV> verticeDestino = LVertices.get(IndexOfV(claveVerticeDestino));
+		
+		System.out.println("El mejor recorrido es :");
 		imprimeMejorRecorrido(verticeDestino.getPath());
 		
 		float tiempo = 0;
@@ -243,12 +245,14 @@ public class Grafo {
 			tiempo += verticeDestino.getPath().get(i).getDatos().getAcumuladorTiempo();
 		}
 		System.out.println();
-		System.out.println("Tiempo de recorrido : "+tiempo);
+		System.out.println("Tiempo de recorrido : "+ tiempo);
 	}
 
 	public void mejorRecorridoViaticos(int claveVerticeOrigen, int claveVerticeDestino) throws GrafoException {
-		Recorrido('v', claveVerticeOrigen);
+		Recorrido('v', claveVerticeOrigen - 1);
 		Vertice<DatosV> verticeDestino = LVertices.get(IndexOfV(claveVerticeDestino));
+		
+		System.out.println("El mejor recorrido es :");
 		imprimeMejorRecorrido(verticeDestino.getPath());
 
 		float viaticos = 0;
@@ -256,7 +260,7 @@ public class Grafo {
 			viaticos += verticeDestino.getPath().get(i).getDatos().getAcumuladorViaticos();
 		}
 		System.out.println();
-		System.out.println("Costo de recorrido : "+viaticos);
+		System.out.println("Costo de recorrido : "+ viaticos);
 	}
 
 	private void imprimeMejorRecorrido(ArrayList<Vertice<DatosV>> path) {
@@ -268,7 +272,7 @@ public class Grafo {
 
 	public void imprimirVertices(ArrayList<Vertice<DatosV>> lVertices) {
 		for (int i = 0; i < lVertices.size(); i++) {
-			System.out.println(lVertices.get(i).getCve()+" - "+lVertices.get(i).getDatos().getCiudad());
+			System.out.println(lVertices.get(i).getDatos().getCiudad()+" - "+lVertices.get(i).getCve());
 		}
 		System.out.println("-----------------------------");
 	}
