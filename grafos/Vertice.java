@@ -2,15 +2,15 @@ package grafos;
 
 import java.util.ArrayList;
 
-public class Vertice<T> {
+public class Vertice<DatosV> {
 
 	private int Cve;
 	private boolean Visitado;
-	private T Datos;
+	private DatosV Datos;
 	private ArrayList<Arista<DatosA>> Adyacentes;
-	private ArrayList<Vertice<T>> path;
+	private ArrayList<Vertice<DatosV>> path;
 
-	public Vertice(int cve, T datos) {
+	public Vertice(int cve, DatosV datos) {
 		Cve = cve;
 		Datos = datos;
 		Visitado = false;
@@ -33,11 +33,11 @@ public class Vertice<T> {
 		Cve = cve;
 	}
 
-	public T getDatos() {
+	public DatosV getDatos() {
 		return Datos;
 	}
 
-	public void setDatos(T datos) {
+	public void setDatos(DatosV datos) {
 		Datos = datos;
 	}
 
@@ -49,14 +49,14 @@ public class Vertice<T> {
 		Adyacentes = adyacentes;
 	}
 
-	public ArrayList<Vertice<T>> getPath() {
+	public ArrayList<Vertice<DatosV>> getPath() {
 		return path;
 	}
 
-	public void setPath(ArrayList<Vertice<T>> path) {
-		path = new ArrayList<Vertice<T>>();
-		path.addAll(path);
-		path.add(this);
+	public void setPath(ArrayList<Vertice<DatosV>> path) {
+		this.path = new ArrayList<Vertice<DatosV>>();
+		this.path.addAll(path);
+		this.path.add(this);
 	}
 
 }

@@ -8,6 +8,10 @@ public class Grafo {
 	private ArrayList<Integer> cola = new ArrayList<Integer>();
 	private boolean Diri;
 
+	public ArrayList<Vertice<DatosV>> getLVertices() {
+		return LVertices;
+	}
+
 	public Grafo(boolean dirigido) {
 		LVertices = new ArrayList<Vertice<DatosV>>();
 		Diri = dirigido;
@@ -93,7 +97,6 @@ public class Grafo {
 			while (v >= 0) {
 				indexV = IndexOfV(v);
 				if (indexV == -1) {
-					System.out.println("A ver cuando sale esto");
 					return;
 				}
 				ArrayList<Arista<DatosA>> Ady = LVertices.get(indexV).getAdyacentes();
@@ -148,7 +151,6 @@ public class Grafo {
 			while (v >= 0) {
 				indexV = IndexOfV(v);
 				if (indexV == -1) {
-					System.out.println("A ver cuando sale esto");
 					return;
 				}
 				Vertice<DatosV> verticeActual = LVertices.get(indexV);
@@ -235,14 +237,26 @@ public class Grafo {
 		Recorrido('t', claveVerticeOrigen);
 		Vertice<DatosV> verticeDestino = LVertices.get(IndexOfV(claveVerticeDestino));
 		imprimeMejorRecorrido(verticeDestino.getPath());
-		verticeDestino.getDatos();
+		
+		float tiempo = 0;
+		for (int i = 0; i < verticeDestino.getPath().size(); i++) {
+			tiempo += verticeDestino.getPath().get(i).getDatos().getAcumuladorTiempo();
+		}
+		System.out.println();
+		System.out.println("Tiempo de recorrido : "+tiempo);
 	}
 
 	public void mejorRecorridoViaticos(int claveVerticeOrigen, int claveVerticeDestino) throws GrafoException {
 		Recorrido('v', claveVerticeOrigen);
 		Vertice<DatosV> verticeDestino = LVertices.get(IndexOfV(claveVerticeDestino));
 		imprimeMejorRecorrido(verticeDestino.getPath());
-		verticeDestino.getDatos();
+
+		float viaticos = 0;
+		for (int i = 0; i < verticeDestino.getPath().size(); i++) {
+			viaticos += verticeDestino.getPath().get(i).getDatos().getAcumuladorViaticos();
+		}
+		System.out.println();
+		System.out.println("Costo de recorrido : "+viaticos);
 	}
 
 	private void imprimeMejorRecorrido(ArrayList<Vertice<DatosV>> path) {
@@ -250,6 +264,13 @@ public class Grafo {
 			DatosV datos = path.get(i).getDatos();
 			System.out.print(datos.getCiudad() + ", ");
 		}
+	}
+
+	public void imprimirVertices(ArrayList<Vertice<DatosV>> lVertices) {
+		for (int i = 0; i < lVertices.size(); i++) {
+			System.out.println(lVertices.get(i).getCve()+" - "+lVertices.get(i).getDatos().getCiudad());
+		}
+		System.out.println("-----------------------------");
 	}
 
 }
