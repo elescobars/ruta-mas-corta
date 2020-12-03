@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Grafo {
 
 	private ArrayList<Vertice<DatosV>> LVertices;
+	private ArrayList<Integer> cola = new ArrayList<Integer>();
 	private boolean Diri;
 
 	public Grafo(boolean dirigido) {
@@ -59,7 +60,7 @@ public class Grafo {
 			throw new GrafoException("El vertice no existe");
 	}
 
-	public void Recorrido(char tipo_A_P) throws GrafoException {
+	public void Recorrido(char tipo_A_P, int claveVerticeOrigen) throws GrafoException {
 		switch (tipo_A_P) {
 			case 'a':
 			case 'A':
@@ -69,9 +70,13 @@ public class Grafo {
 			case 'P':
 				RPP();
 				break;
+			case 't':
+			case 'T':
+				calcularMejoresCaminos(claveVerticeOrigen, true);
+				break;
 			case 'v':
 			case 'V':
-				CaminoMenosViaticos();
+				calcularMejoresCaminos(claveVerticeOrigen, false);
 				break;
 			default:
 				throw new GrafoException("Tipo de recorrido invalido");
@@ -85,7 +90,7 @@ public class Grafo {
 			LVertices.get(0).setVisitado(true);
 			ColaAdd(LVertices.get(0).getCve());
 			int v = ColaRet(), indexV = 0, NumAdy = 0, indexVA = 0;
-			while (v > 0) {
+			while (v >= 0) {
 				indexV = IndexOfV(v);
 				if (indexV == -1) {
 					System.out.println("A ver cuando sale esto");
@@ -127,21 +132,66 @@ public class Grafo {
 		}
 	}
 
-	private void CaminoMenosViaticos() {
-
-		ArrayList<Vertice<DatosV>> caminoMasBarato = new ArrayList<Vertice<DatosV>>();
-		float acumuladorViaticos = 0;
-
+	private void calcularMejoresCaminos(int indiceInicio, boolean basadoTiempo) {
 		PreparaInicioDeRecorrido();
 		if (LVertices.size() > 0) {
-			Visitar(LVertices.get(0).getDatos());
-			LVertices.get(0).setVisitado(true);
+			Vertice<DatosV> verticeRaiz = LVertices.get(indiceInicio);
+			DatosV datosVerticeRaiz = verticeRaiz.getDatos();
+			// Visitar(datosVerticeRaiz);
+			verticeRaiz.setVisitado(true);
+			verticeRaiz.setPath(new ArrayList<Vertice<DatosV>>());
+			datosVerticeRaiz.setAcumuladorTiempo(0);
+			datosVerticeRaiz.setAcumuladorViaticos(0);
+			ColaAdd(verticeRaiz.getCve());
 
-			caminoMasBarato.add(LVertices.get(0));
+			int v = ColaRet(), indexV = 0, numAdy = 0, indexVA = 0;
+			while (v >= 0) {
+				indexV = IndexOfV(v);
+				if (indexV == -1) {
+					System.out.println("A ver cuando sale esto");
+					return;
+				}
+				Vertice<DatosV> verticeActual = LVertices.get(indexV);
+				ArrayList<Arista<DatosA>> ady = verticeActual.getAdyacentes();
+				numAdy = ady.size();
+				for (int a = 0; a < numAdy; a++) {
+					Arista<DatosA> aristaActual = ady.get(a);
+					indexVA = IndexOfV(aristaActual.getCveV());
+					Vertice<DatosV> verticeConectado = LVertices.get(indexVA);
+					DatosV datosVerticeConectado = verticeConectado.getDatos();
+					if (!verticeConectado.isVisitado()) {
+						ColaAdd(aristaActual.getCveV());
+						datosVerticeConectado.setAcumuladorTiempo(
+								datosVerticeConectado.getAcumuladorTiempo() + aristaActual.getDatos().getTiempo());
+						datosVerticeConectado.setAcumuladorViaticos(
+								datosVerticeConectado.getAcumuladorViaticos() + aristaActual.getDatos().getViaticos());
+						verticeConectado.setPath(verticeActual.getPath());
+						verticeConectado.setVisitado(true);
+					} else {
+						if (!basadoTiempo && datosVerticeConectado.getAcumuladorViaticos() > verticeActual.getDatos()
+								.getAcumuladorViaticos() + aristaActual.getDatos().getViaticos()) {
+							datosVerticeConectado.setAcumuladorViaticos(verticeActual.getDatos().getAcumuladorViaticos()
+									+ aristaActual.getDatos().getViaticos());
+							datosVerticeConectado.setAcumuladorTiempo(verticeActual.getDatos().getAcumuladorTiempo()
+									+ aristaActual.getDatos().getTiempo());
+							verticeConectado.setPath(verticeActual.getPath());
+						}
 
+						if (basadoTiempo && datosVerticeConectado.getAcumuladorTiempo() > verticeActual.getDatos()
+								.getAcumuladorTiempo() + aristaActual.getDatos().getTiempo()) {
+							datosVerticeConectado.setAcumuladorViaticos(verticeActual.getDatos().getAcumuladorViaticos()
+									+ aristaActual.getDatos().getViaticos());
+							datosVerticeConectado.setAcumuladorTiempo(verticeActual.getDatos().getAcumuladorTiempo()
+									+ aristaActual.getDatos().getTiempo());
+							verticeConectado.setPath(verticeActual.getPath());
+						}
+					}
+				}
+				v = ColaRet();
+			}
+			System.out.println();
 		} else
 			System.out.println("Grafo vacio");
-
 	}
 
 	private int IndexOfV(int cve) {
@@ -157,8 +207,6 @@ public class Grafo {
 				return i;
 		return -1;
 	}
-
-	private ArrayList<Integer> cola = new ArrayList<Integer>();
 
 	private void ColaAdd(int vertice) {
 		cola.add(vertice);
@@ -181,6 +229,27 @@ public class Grafo {
 
 	private static void Visitar(DatosV vertice) {
 		System.out.println(vertice.getCiudad() + ", ");
+	}
+
+	public void mejorRecorridoTiempo(int claveVerticeOrigen, int claveVerticeDestino) throws GrafoException {
+		Recorrido('t', claveVerticeOrigen);
+		Vertice<DatosV> verticeDestino = LVertices.get(IndexOfV(claveVerticeDestino));
+		imprimeMejorRecorrido(verticeDestino.getPath());
+		verticeDestino.getDatos();
+	}
+
+	public void mejorRecorridoViaticos(int claveVerticeOrigen, int claveVerticeDestino) throws GrafoException {
+		Recorrido('v', claveVerticeOrigen);
+		Vertice<DatosV> verticeDestino = LVertices.get(IndexOfV(claveVerticeDestino));
+		imprimeMejorRecorrido(verticeDestino.getPath());
+		verticeDestino.getDatos();
+	}
+
+	private void imprimeMejorRecorrido(ArrayList<Vertice<DatosV>> path) {
+		for (int i = 0; i < path.size(); i++) {
+			DatosV datos = path.get(i).getDatos();
+			System.out.print(datos.getCiudad() + ", ");
+		}
 	}
 
 }

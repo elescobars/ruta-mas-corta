@@ -3,16 +3,17 @@ package grafos;
 public class DatosV {
 
 	private String Ciudad;
-	private float Tiempo;
+	private float acumuladorTiempo;
+	private float acumuladorViaticos;
 
 	public DatosV(String ciudad) {
 		Ciudad = ciudad;
-		Tiempo = 0;
+		acumuladorTiempo = 0;
 	}
 
-	public DatosV(String ciudad, float tiempo) {
+	public DatosV(String ciudad, float acumuladorTiempo) {
 		Ciudad = ciudad;
-		Tiempo = tiempo;
+		this.acumuladorTiempo = acumuladorTiempo;
 	}
 
 	public String getCiudad() {
@@ -23,12 +24,20 @@ public class DatosV {
 		Ciudad = ciudad;
 	}
 
-	public float getTiempo() {
-		return Tiempo;
+	public float getAcumuladorTiempo() {
+		return acumuladorTiempo;
 	}
 
-	public void setTiempo(float tiempo) {
-		Tiempo = tiempo;
+	public void setAcumuladorTiempo(float acumuladorTiempo) {
+		this.acumuladorTiempo = acumuladorTiempo;
+	}
+
+	public float getAcumuladorViaticos() {
+		return acumuladorViaticos;
+	}
+
+	public void setAcumuladorViaticos(float acumuladorViaticos) {
+		this.acumuladorViaticos = acumuladorViaticos;
 	}
 
 }

@@ -2,28 +2,33 @@ package grafos;
 
 public class DatosA {
 
-	private float Viaticos;
-	private float Tiempo;
+	private float viaticos;
+	private float tiempo;
 
-	public DatosA(float viaticos, float tiempo) {
-		Viaticos = viaticos;
-		Tiempo = tiempo;
+	public DatosA(float tiempo) {
+		this.tiempo = tiempo;
+		viaticos = 0;
+	}
+
+	public DatosA(float tiempo, float viaticos) {
+		this.viaticos = viaticos;
+		this.tiempo = tiempo;
 	}
 
 	public float getViaticos() {
-		return Viaticos;
+		return viaticos;
 	}
 
 	public void setViaticos(float viaticos) {
-		Viaticos = viaticos;
+		this.viaticos = viaticos;
 	}
 
 	public float getTiempo() {
-		return Tiempo;
+		return tiempo;
 	}
 
 	public void setTiempo(float tiempo) {
-		Tiempo = tiempo;
+		this.tiempo = tiempo;
 	}
 
 }

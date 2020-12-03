@@ -8,6 +8,7 @@ public class Vertice<T> {
 	private boolean Visitado;
 	private T Datos;
 	private ArrayList<Arista<DatosA>> Adyacentes;
+	private ArrayList<Vertice<T>> path;
 
 	public Vertice(int cve, T datos) {
 		Cve = cve;
@@ -46,6 +47,16 @@ public class Vertice<T> {
 
 	public void setAdyacentes(ArrayList<Arista<DatosA>> adyacentes) {
 		Adyacentes = adyacentes;
+	}
+
+	public ArrayList<Vertice<T>> getPath() {
+		return path;
+	}
+
+	public void setPath(ArrayList<Vertice<T>> path) {
+		path = new ArrayList<Vertice<T>>();
+		path.addAll(path);
+		path.add(this);
 	}
 
 }
