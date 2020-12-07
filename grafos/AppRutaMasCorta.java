@@ -37,11 +37,11 @@ public class AppRutaMasCorta {
             switch (tipoRecorrido.charAt(0)) {
                 case 't':
                 case 'T':
-                    graph.mejorRecorridoTiempo(claveOrigen, claveDestino);
+                    graph.mejorRecorridoTiempo(claveOrigen - 1, claveDestino);
                     break;
                 case 'v':
                 case 'V':
-                    graph.mejorRecorridoViaticos(claveOrigen, claveDestino);
+                    graph.mejorRecorridoViaticos(claveOrigen - 1, claveDestino);
                     break;
                 default:
                     System.out.println("El tipo de destino no es valido");
